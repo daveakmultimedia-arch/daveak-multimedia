@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Poppins', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Default: Obsidian Gold */
+    --theme-bg-canvas: #080808;
+    --theme-bg-surface: #0f0f12;
+    --theme-bg-elevated: #16161a;
+    --theme-bg-input: #121215;
+    --theme-border: #222226;
+    --theme-border-highlight: #33333a;
+    --theme-text-primary: #f5f5f5;
+    --theme-text-secondary: #a3a3a3;
+    --theme-text-muted: #737373;
+    --theme-accent: #d4af37;
+    --theme-accent-hover: #e5c158;
+    --theme-accent-contrast: #000000;
+    --theme-accent-badge-bg: rgba(212, 175, 55, 0.12);
+  }
+
+  /* Theme 1: Obsidian Gold (Default Luxury Cinematic) */
+  [data-theme="obsidian-gold"] {
+    --theme-bg-canvas: #080808;
+    --theme-bg-surface: #0f0f12;
+    --theme-bg-elevated: #16161a;
+    --theme-bg-input: #121215;
+    --theme-border: #222226;
+    --theme-border-highlight: #383840;
+    --theme-text-primary: #f5f5f5;
+    --theme-text-secondary: #a3a3a3;
+    --theme-text-muted: #737373;
+    --theme-accent: #d4af37;
+    --theme-accent-hover: #e5c158;
+    --theme-accent-contrast: #000000;
+    --theme-accent-badge-bg: rgba(212, 175, 55, 0.12);
+  }
+
+  /* Theme 2: Minimalist Light (Clean White Studio) */
+  [data-theme="clean-light"] {
+    --theme-bg-canvas: #f8f9fa;
+    --theme-bg-surface: #ffffff;
+    --theme-bg-elevated: #f1f3f5;
+    --theme-bg-input: #ffffff;
+    --theme-border: #e2e8f0;
+    --theme-border-highlight: #cbd5e1;
+    --theme-text-primary: #0f172a;
+    --theme-text-secondary: #475569;
+    --theme-text-muted: #64748b;
+    --theme-accent: #b8860b;
+    --theme-accent-hover: #996515;
+    --theme-accent-contrast: #ffffff;
+    --theme-accent-badge-bg: rgba(184, 134, 11, 0.1);
+  }
+
+  /* Theme 3: Cobalt Midnight (Modern Broadcast & Tech) */
+  [data-theme="cobalt-studio"] {
+    --theme-bg-canvas: #070d18;
+    --theme-bg-surface: #0d172a;
+    --theme-bg-elevated: #13223f;
+    --theme-bg-input: #0a1324;
+    --theme-border: #1e293b;
+    --theme-border-highlight: #334155;
+    --theme-text-primary: #f8fafc;
+    --theme-text-secondary: #94a3b8;
+    --theme-text-muted: #64748b;
+    --theme-accent: #3b82f6;
+    --theme-accent-hover: #60a5fa;
+    --theme-accent-contrast: #ffffff;
+    --theme-accent-badge-bg: rgba(59, 130, 246, 0.15);
+  }
+
+  /* Theme 4: Warm Travertine (Artisan & Editorial) */
+  [data-theme="warm-editorial"] {
+    --theme-bg-canvas: #12100e;
+    --theme-bg-surface: #1c1917;
+    --theme-bg-elevated: #292524;
+    --theme-bg-input: #161412;
+    --theme-border: #292524;
+    --theme-border-highlight: #44403c;
+    --theme-text-primary: #fafaf9;
+    --theme-text-secondary: #a8a29e;
+    --theme-text-muted: #78716c;
+    --theme-accent: #d4a373;
+    --theme-accent-hover: #e0b488;
+    --theme-accent-contrast: #1c1917;
+    --theme-accent-badge-bg: rgba(212, 163, 115, 0.15);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--theme-bg-canvas);
+    color: var(--theme-text-primary);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-bg-canvas);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border-highlight);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-muted);
+}
+
+/* Accent utilities matching active theme */
+.theme-canvas {
+  background-color: var(--theme-bg-canvas);
+}
+
+.theme-surface {
+  background-color: var(--theme-bg-surface);
+}
+
+.theme-elevated {
+  background-color: var(--theme-bg-elevated);
+}
+
+.theme-input {
+  background-color: var(--theme-bg-input);
+}
+
+.theme-border {
+  border-color: var(--theme-border);
+}
+
+.theme-border-highlight {
+  border-color: var(--theme-border-highlight);
+}
+
+.theme-text-primary {
+  color: var(--theme-text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--theme-text-muted);
+}
+
+.theme-accent {
+  color: var(--theme-accent);
+}
+
+.theme-accent-bg {
+  background-color: var(--theme-accent);
+  color: var(--theme-accent-contrast);
+}
+
+.theme-accent-badge {
+  background-color: var(--theme-accent-badge-bg);
+  color: var(--theme-accent);
+}
+
+/* Gold/Accent gradient text */
+.gold-gradient-text {
+  background: linear-gradient(135deg, var(--theme-accent-hover) 0%, var(--theme-accent) 60%, var(--theme-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
