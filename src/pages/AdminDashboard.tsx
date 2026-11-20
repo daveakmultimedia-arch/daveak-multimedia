@@ -99,6 +99,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [settingsForm, setSettingsForm] = useState<WebsiteSettings>(settings);
   const [settingsSaved, setSettingsSaved] = useState(false);
 
+  useEffect(() => {
+    setSettingsForm(settings);
+  }, [settings]);
+
   // Check existing session
   useEffect(() => {
     setIsAuthenticated(api.verifyAdminSession());
@@ -212,10 +216,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // --- Settings Save ---
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    await api.updateSettings(settingsForm);
-    setSettingsSaved(true);
-    setTimeout(() => setSettingsSaved(false), 3000);
-    onSettingsChange();
+    try {
+      await api.updateSettings(settingsForm);
+      setSettingsSaved(true);
+      alert('✓ Website Settings and Hero Background Images saved successfully!');
+      setTimeout(() => setSettingsSaved(false), 4000);
+      onSettingsChange();
+    } catch (err: any) {
+      alert('Failed to save settings: ' + (err.message || 'Unknown error'));
+    }
   };
 
   // Render Login Gate if unauthenticated
@@ -1079,6 +1088,92 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     className="w-full p-2 bg-neutral-900 border border-neutral-800 rounded-lg text-white"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Hero Background Images Manager */}
+            <div className="pt-4 border-t border-neutral-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
+                    Hero Background Slideshow Images (Auto-rotates every 4s)
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 mt-0.5">
+                    Upload or add multiple image URLs to feature in the homepage hero background rotation.
+                  </p>
+                </div>
+                <label className="px-3 py-1.5 bg-[#d4af37] text-black text-xs font-semibold rounded-lg cursor-pointer hover:bg-[#e5c158] transition-colors">
+                  <span>+ Upload Hero Image</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const url = await api.uploadMedia(file);
+                        const currentImages = settingsForm.heroImages || [];
+                        setSettingsForm({
+                          ...settingsForm,
+                          heroImages: [...currentImages, url],
+                        });
+                        alert('✓ Hero background image uploaded successfully! Click "Save Website Settings" below to apply.');
+                      } catch (err) {
+                        alert('Failed to upload image.');
+                      }
+                    }}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {(settingsForm.heroImages || []).map((imgUrl, idx) => (
+                  <div key={idx} className="relative group aspect-[16/10] rounded-xl overflow-hidden border border-neutral-800 bg-neutral-900">
+                    <img src={imgUrl} alt={`Hero ${idx + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = (settingsForm.heroImages || []).filter((_, i) => i !== idx);
+                        setSettingsForm({ ...settingsForm, heroImages: updated });
+                      }}
+                      className="absolute top-2 right-2 p-1 bg-red-600/80 hover:bg-red-600 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Remove Image"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="absolute bottom-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[9px] font-mono text-white">
+                      #{idx + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add URL Manual Input */}
+              <div className="flex gap-2 pt-2">
+                <input
+                  type="text"
+                  id="newHeroImageUrl"
+                  placeholder="Or paste image URL here..."
+                  className="flex-1 text-xs p-2.5 bg-neutral-900 border border-neutral-800 rounded-lg text-white font-mono text-[11px]"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const input = document.getElementById('newHeroImageUrl') as HTMLInputElement;
+                    if (input && input.value.trim()) {
+                      const currentImages = settingsForm.heroImages || [];
+                      setSettingsForm({
+                        ...settingsForm,
+                        heroImages: [...currentImages, input.value.trim()],
+                      });
+                      input.value = '';
+                    }
+                  }}
+                  className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-medium rounded-lg"
+                >
+                  Add URL
+                </button>
               </div>
             </div>
 

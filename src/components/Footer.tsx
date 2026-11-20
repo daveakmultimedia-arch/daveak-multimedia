@@ -1,14 +1,13 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Instagram, Linkedin, Youtube, Facebook, ArrowUpRight, Palette } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, Youtube, Facebook, ArrowUpRight } from 'lucide-react';
 import { WebsiteSettings } from '../types';
 
 interface FooterProps {
   onNavigate: (page: string) => void;
   settings: WebsiteSettings;
-  onOpenThemeSelector?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onOpenThemeSelector }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, settings }) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -215,21 +214,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onOpenThem
           </div>
         </div>
 
-        {/* Bottom Bar: Quiet legal, copyright and theme switch */}
+        {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-[var(--theme-border)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--theme-text-muted)]">
           <div>
             © {currentYear} DAVEAK-MULTIMEDIA. Cape Coast, Ghana. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
-            {onOpenThemeSelector && (
-              <button
-                onClick={onOpenThemeSelector}
-                className="flex items-center gap-1.5 text-[var(--theme-accent)] hover:underline"
-              >
-                <Palette className="w-3.5 h-3.5" />
-                <span>Theme Options</span>
-              </button>
-            )}
             <button
               onClick={() => onNavigate('privacy')}
               className="hover:text-[var(--theme-text-secondary)] transition-colors"
@@ -242,7 +232,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onOpenThem
             >
               Terms of Service
             </button>
-
           </div>
         </div>
       </div>

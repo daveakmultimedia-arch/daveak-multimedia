@@ -9,8 +9,6 @@ import { Footer } from './components/Footer';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { LightboxModal } from './components/LightboxModal';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
-import { ThemeSelectorModal } from './components/ThemeSelector';
-import { Palette } from 'lucide-react';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -37,29 +35,10 @@ export default function App() {
   const [quoteServicePrefill, setQuoteServicePrefill] = useState<string | undefined>();
   const [servicesCategoryFilter, setServicesCategoryFilter] = useState<string | undefined>();
 
-  // Theme state
-  const [currentTheme, setCurrentTheme] = useState<string>(() => {
-    try {
-      return localStorage.getItem('daveak_theme') || 'obsidian-gold';
-    } catch {
-      return 'obsidian-gold';
-    }
-  });
-  const [themeModalOpen, setThemeModalOpen] = useState(false);
-
-  // Apply theme to document element
+  // Always use Clean Minimalist theme
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    try {
-      localStorage.setItem('daveak_theme', currentTheme);
-    } catch {
-      // Storage unavailable
-    }
-  }, [currentTheme]);
-
-  const handleSelectTheme = (themeId: string) => {
-    setCurrentTheme(themeId);
-  };
+    document.documentElement.setAttribute('data-theme', 'clean-light');
+  }, []);
 
   // Global data state
   const [projects, setProjects] = useState<Project[]>(initialProjects);
@@ -178,13 +157,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--theme-bg-canvas)] text-[var(--theme-text-primary)] transition-colors duration-200">
-      {/* 3-Zone Header Contract */}
+      {/* Navbar */}
       <Navbar
         currentPage={currentPage}
         onNavigate={navigateTo}
-        isAdmin={api.verifyAdminSession()}
-        onOpenThemeSelector={() => setThemeModalOpen(true)}
-        currentTheme={currentTheme}
       />
 
       {/* Main Page Content Body */}
@@ -195,6 +171,7 @@ export default function App() {
             projects={projects}
             services={services}
             testimonials={testimonials}
+            settings={settings}
             onSelectProject={(p) => setSelectedProject(p)}
             onOpenVideo={(url) => setVideoModalUrl(url)}
           />
@@ -305,31 +282,10 @@ export default function App() {
       <Footer
         onNavigate={navigateTo}
         settings={settings}
-        onOpenThemeSelector={() => setThemeModalOpen(true)}
       />
-
-      {/* Floating Theme Quick-Access Badge on bottom left */}
-      <div className="fixed bottom-6 left-6 z-40">
-        <button
-          onClick={() => setThemeModalOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--theme-bg-surface)] border border-[var(--theme-border)] text-xs font-medium text-[var(--theme-text-primary)] shadow-xl hover:scale-105 active:scale-95 transition-all group"
-          title="Choose Website Theme"
-        >
-          <Palette className="w-4 h-4 text-[var(--theme-accent)] group-hover:rotate-45 transition-transform" />
-          <span className="hidden sm:inline">Theme Options</span>
-        </button>
-      </div>
 
       {/* Floating WhatsApp Contact Button */}
       <WhatsAppFloatingButton settings={settings} currentPage={currentPage} />
-
-      {/* Professional Themes Modal */}
-      <ThemeSelectorModal
-        isOpen={themeModalOpen}
-        onClose={() => setThemeModalOpen(false)}
-        currentTheme={currentTheme}
-        onSelectTheme={handleSelectTheme}
-      />
 
       {/* High-Resolution Gallery Lightbox Modal */}
       <LightboxModal

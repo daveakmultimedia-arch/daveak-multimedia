@@ -225,6 +225,7 @@ export const api = {
           location: data.location,
           officeHours: data.office_hours || data.officeHours,
           socials: data.socials || initialSettings.socials,
+          heroImages: data.hero_images || data.heroImages || initialSettings.heroImages,
         };
         setLocal(STORAGE_KEYS.SETTINGS, mapped);
         return mapped;
@@ -248,6 +249,7 @@ export const api = {
         location: settings.location,
         office_hours: settings.officeHours,
         socials: settings.socials,
+        hero_images: settings.heroImages || initialSettings.heroImages,
       };
       await supabase.from('agency_settings').upsert(payload);
     } catch {

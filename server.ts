@@ -97,6 +97,13 @@ if (!existingDb) {
         linkedin: 'https://linkedin.com/company/daveakmultimedia',
         youtube: 'https://youtube.com/@daveakmultimedia',
       },
+      heroImages: [
+        '/src/assets/images/hero_cinematic_production_1795142170945.jpg',
+        '/src/assets/images/portfolio_corporate_summit_1795142171141.jpg',
+        '/src/assets/images/portfolio_ngo_documentary_1795142171892.jpg',
+        '/src/assets/images/portfolio_wedding_cinematography_1795142171823.jpg',
+        '/src/assets/images/portfolio_brand_commercial_1795142172634.jpg',
+      ],
     },
     enquiries: [],
     projects: [],

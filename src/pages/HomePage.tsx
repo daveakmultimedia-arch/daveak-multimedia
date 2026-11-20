@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Project, ServiceCategory, Testimonial } from '../types';
+import React, { useState, useEffect } from 'react';
+import { Project, ServiceCategory, Testimonial, WebsiteSettings } from '../types';
 import { ProjectCard } from '../components/ProjectCard';
 import {
   ArrowRight,
@@ -19,6 +19,7 @@ interface HomePageProps {
   projects: Project[];
   services: ServiceCategory[];
   testimonials: Testimonial[];
+  settings?: WebsiteSettings;
   onSelectProject: (project: Project) => void;
   onOpenVideo: (url: string) => void;
 }
@@ -28,10 +29,31 @@ export const HomePage: React.FC<HomePageProps> = ({
   projects,
   services,
   testimonials,
+  settings,
   onSelectProject,
   onOpenVideo,
 }) => {
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
+
+  // Hero slideshow state (4s interval)
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const heroImages = (settings && settings.heroImages && settings.heroImages.length > 0)
+    ? settings.heroImages
+    : [
+        '/src/assets/images/hero_cinematic_production_1795142170945.jpg',
+        '/src/assets/images/portfolio_corporate_summit_1795142171141.jpg',
+        '/src/assets/images/portfolio_ngo_documentary_1795142171892.jpg',
+        '/src/assets/images/portfolio_wedding_cinematography_1795142171823.jpg',
+        '/src/assets/images/portfolio_brand_commercial_1795142172634.jpg',
+      ];
+
+  useEffect(() => {
+    if (heroImages.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
 
   const filteredProjects = activeCategoryFilter === 'all'
     ? projects.slice(0, 6)
@@ -83,35 +105,40 @@ export const HomePage: React.FC<HomePageProps> = ({
     <div className="space-y-24 sm:space-y-32 pb-24 text-[var(--theme-text-primary)]">
       {/* HERO SECTION */}
       <section className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center justify-center overflow-hidden pt-6">
-        {/* Cinematic Backdrop Image */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/src/assets/images/hero_cinematic_production_1795142170945.jpg"
-            alt="DAVEAK-MULTIMEDIA Production Set"
-            className="w-full h-full object-cover object-center filter brightness-[0.38] contrast-[1.08] scale-[1.02]"
-            referrerPolicy="no-referrer"
-          />
+        {/* Cinematic Backdrop Image Slideshow */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {heroImages.map((imgSrc, idx) => (
+            <img
+              key={imgSrc + idx}
+              src={imgSrc}
+              alt={`DAVEAK-MULTIMEDIA Production ${idx + 1}`}
+              className={`absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.52] contrast-[1.04] scale-[1.02] transition-opacity duration-1000 ease-in-out ${
+                idx === currentHeroIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+              referrerPolicy="no-referrer"
+            />
+          ))}
           {/* Subtle vignette and gradient fades */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/70 z-10" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 pt-8 text-white">
           {/* Quiet Unboxed Editorial Tag */}
-          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--theme-accent)]">
+          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#d4af37] bg-black/40 px-3 py-1 rounded-full border border-white/10 backdrop-blur-sm">
             <span>Cape Coast, Ghana</span>
             <span aria-hidden="true" className="opacity-40">·</span>
             <span>Serving Nationwide & Global Markets</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] text-balance">
-            Unparalleled Creativity <span className="gold-gradient-text italic font-normal">With Speed.</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] text-balance drop-shadow-2xl">
+            Unparalleled Creativity <span className="text-[#e5c158] italic font-normal">With Speed.</span>
           </h1>
 
           {/* Value Proposition */}
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-neutral-200 font-light leading-relaxed text-balance">
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-neutral-100 font-light leading-relaxed text-balance drop-shadow-md">
             We preserve memories, communicate impact and build legacies through our lens. Helping organisations, brands, churches, and individuals communicate stories that command respect.
           </p>
 

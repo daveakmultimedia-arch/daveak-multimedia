@@ -108,5 +108,6 @@ export interface WebsiteSettings {
     youtube: string;
     vimeo?: string;
   };
+  heroImages?: string[];
   adminPasswordHash?: string;
 }

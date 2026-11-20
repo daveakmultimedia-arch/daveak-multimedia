@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
-import { Menu, X, ChevronDown, Lock, Palette } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 
 interface NavbarProps {
   currentPage: string;
   onNavigate: (page: string) => void;
-  isAdmin: boolean;
-  onOpenThemeSelector: () => void;
-  currentTheme: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  currentPage,
-  onNavigate,
-  isAdmin,
-  onOpenThemeSelector,
-  currentTheme,
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
 
@@ -47,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </button>
 
-          {/* Zone 2: 4-5 concise single-line nav links */}
+          {/* Zone 2: Nav links */}
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[var(--theme-text-secondary)]">
             <button
               onClick={() => handleNavClick('about')}
@@ -122,20 +113,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* Zone 3: 1 primary action + theme toggle */}
+          {/* Zone 3: 1 primary action */}
           <div className="hidden sm:flex items-center gap-4 shrink-0">
-            {/* Theme switcher button */}
-            <button
-              onClick={onOpenThemeSelector}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--theme-bg-elevated)] border border-[var(--theme-border)] text-xs font-medium text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] hover:border-[var(--theme-accent)]/50 transition-colors"
-              title="Change Website Theme"
-            >
-              <Palette className="w-3.5 h-3.5 text-[var(--theme-accent)]" />
-              <span>Theme</span>
-            </button>
-
-
-
             <button
               onClick={() => handleNavClick('quote')}
               className="px-5 py-2.5 text-xs font-semibold rounded-lg transition-all duration-150 shadow-sm whitespace-nowrap shrink-0 theme-accent-bg hover:opacity-90 active:scale-95"
@@ -146,13 +125,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={onOpenThemeSelector}
-              className="p-2 text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]"
-              aria-label="Change Theme"
-            >
-              <Palette className="w-4 h-4 text-[var(--theme-accent)]" />
-            </button>
             <button
               onClick={() => handleNavClick('quote')}
               className="px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap theme-accent-bg"
@@ -229,22 +201,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="pt-3 border-t border-[var(--theme-border)] space-y-3">
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenThemeSelector();
-              }}
-              className="w-full flex items-center justify-between py-2 text-sm text-[var(--theme-text-primary)]"
-            >
-              <span className="flex items-center gap-2">
-                <Palette className="w-4 h-4 text-[var(--theme-accent)]" />
-                <span>Switch Theme (4 Options)</span>
-              </span>
-              <span className="text-xs font-mono text-[var(--theme-text-muted)] capitalize">
-                {currentTheme.replace('-', ' ')}
-              </span>
-            </button>
-
-            <button
               onClick={() => handleNavClick('contact')}
               className={`block w-full text-left py-2 text-base font-medium ${
                 currentPage === 'contact' ? 'text-[var(--theme-accent)]' : 'text-[var(--theme-text-primary)]'
@@ -258,7 +214,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Request a Project Quote
             </button>
-
           </div>
         </div>
       )}
